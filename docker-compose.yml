@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: mauieng-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mauieng
+    ports:
+      # На этом компьютере порт 5432 уже занимает служба PostgreSQL 18.
+      - "5433:5432"
+    volumes:
+      - mauieng-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mauieng"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mauieng-pg:

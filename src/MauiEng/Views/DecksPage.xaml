@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MauiEng.Views.DecksPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:core="clr-namespace:MauiEng.Core;assembly=MauiEng.Core"
+    xmlns:vm="clr-namespace:MauiEng.ViewModels"
+    x:DataType="vm:DecksViewModel"
+    Title="Колоды"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
+
+    <Grid Padding="20,28,20,16" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+        <Label
+            Text="Колоды"
+            FontAttributes="Bold"
+            FontSize="32" />
+        <Label
+            Grid.Row="1"
+            Text="{Binding ErrorMessage}"
+            IsVisible="{Binding HasError}"
+            TextColor="{StaticResource Danger}" />
+        <Grid Grid.Row="2">
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Start"
+                HorizontalOptions="Center" />
+            <CollectionView
+                ItemsSource="{Binding Decks}"
+                SelectionMode="Single"
+                SelectionChanged="OnDeckSelected">
+                <CollectionView.EmptyView>
+                    <Label
+                        Text="Колод пока нет"
+                        Margin="0,32,0,0"
+                        FontSize="18"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{StaticResource Gray500}" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="core:DeckSummary">
+                        <Border
+                            Margin="0,0,0,12"
+                            Padding="18,16"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource CardSurface}, Dark={StaticResource CardSurfaceDark}}"
+                            StrokeShape="RoundRectangle 18"
+                            StrokeThickness="0">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    Text="{Binding Name}"
+                                    FontAttributes="Bold"
+                                    FontSize="22" />
+                                <Label
+                                    Text="{Binding Summary}"
+                                    FontSize="15"
+                                    TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentPage>

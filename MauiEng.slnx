@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MauiEng.Core/MauiEng.Core.csproj" />
+    <Project Path="src/MauiEng/MauiEng.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MauiEng.Tests/MauiEng.Tests.csproj" />
+  </Folder>
+</Solution>

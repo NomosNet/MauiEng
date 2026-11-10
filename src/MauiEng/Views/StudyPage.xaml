@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MauiEng.Views.StudyPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MauiEng.ViewModels"
+    x:DataType="vm:StudyViewModel"
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
+
+    <Grid Padding="20,12,20,24" RowDefinitions="Auto,*,Auto" RowSpacing="16">
+        <Grid ColumnDefinitions="*,Auto">
+            <Label
+                Text="{Binding RemainingText}"
+                FontSize="16"
+                TextColor="{StaticResource Gray500}"
+                VerticalOptions="Center" />
+            <Button
+                Grid.Column="1"
+                Text="Звук"
+                Command="{Binding SpeakCommand}"
+                IsVisible="{Binding HasCard}"
+                HeightRequest="48"
+                FontSize="16" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <ActivityIndicator
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
+            <Label
+                Text="На сегодня всё"
+                IsVisible="{Binding IsEmpty}"
+                FontAttributes="Bold"
+                FontSize="32"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+            <Border
+                IsVisible="{Binding HasCard}"
+                Padding="24"
+                BackgroundColor="{AppThemeBinding Light={StaticResource CardSurface}, Dark={StaticResource CardSurfaceDark}}"
+                StrokeShape="RoundRectangle 28"
+                StrokeThickness="0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCardTapped" />
+                </Border.GestureRecognizers>
+                <Grid>
+                    <VerticalStackLayout
+                        x:Name="FrontFace"
+                        Spacing="16"
+                        VerticalOptions="Center">
+                        <Label
+                            Text="{Binding BoxLabel}"
+                            FontSize="16"
+                            HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource Primary}" />
+                        <Label
+                            Text="{Binding Term}"
+                            FontAttributes="Bold"
+                            FontSize="46"
+                            HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="Нажмите, чтобы перевернуть"
+                            FontSize="14"
+                            HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout
+                        x:Name="BackFace"
+                        IsVisible="False"
+                        Spacing="16"
+                        VerticalOptions="Center">
+                        <Label
+                            Text="{Binding Translation}"
+                            FontAttributes="Bold"
+                            FontSize="36"
+                            HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="{Binding Transcription}"
+                            FontSize="22"
+                            HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="{Binding Example}"
+                            FontSize="18"
+                            HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="8">
+            <Label
+                Text="{Binding ErrorMessage}"
+                IsVisible="{Binding HasError}"
+                TextColor="{StaticResource Danger}"
+                HorizontalTextAlignment="Center" />
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="12"
+                IsVisible="{Binding HasCard}">
+                <Button
+                    Text="Не помню"
+                    Command="{Binding ForgotCommand}"
+                    BackgroundColor="{StaticResource Danger}"
+                    TextColor="White"
+                    FontSize="20"
+                    HeightRequest="64" />
+                <Button
+                    Grid.Column="1"
+                    Text="Помню"
+                    Command="{Binding RememberCommand}"
+                    FontSize="20"
+                    HeightRequest="64" />
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

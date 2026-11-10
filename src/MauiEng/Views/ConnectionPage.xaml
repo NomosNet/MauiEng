@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MauiEng.Views.ConnectionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MauiEng.ViewModels"
+    x:DataType="vm:ConnectionViewModel"
+    Title="Подключение"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,32,24,28" Spacing="12">
+            <Label
+                Text="Подключение"
+                FontAttributes="Bold"
+                FontSize="32" />
+            <Label
+                Text="На телефоне в поле хоста укажите адрес компьютера в сети, не localhost."
+                FontSize="15"
+                TextColor="{StaticResource Gray500}" />
+
+            <Label Text="Хост" FontSize="14" />
+            <Entry Text="{Binding Host}" Placeholder="localhost" FontSize="18" />
+
+            <Label Text="Порт" FontSize="14" />
+            <Entry
+                Text="{Binding PortText}"
+                Keyboard="Numeric"
+                Placeholder="5432"
+                FontSize="18" />
+
+            <Label Text="База" FontSize="14" />
+            <Entry Text="{Binding DatabaseName}" Placeholder="mauieng" FontSize="18" />
+
+            <Label Text="Пользователь" FontSize="14" />
+            <Entry Text="{Binding Username}" Placeholder="postgres" FontSize="18" />
+
+            <Label Text="Пароль" FontSize="14" />
+            <Entry Text="{Binding Password}" IsPassword="True" FontSize="18" />
+
+            <Label
+                Text="{Binding ErrorMessage}"
+                IsVisible="{Binding HasError}"
+                TextColor="{StaticResource Danger}"
+                FontSize="15" />
+
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                HorizontalOptions="Start" />
+
+            <Button
+                Text="Подключиться"
+                Command="{Binding ConnectCommand}"
+                HeightRequest="64"
+                FontSize="20"
+                Margin="0,8,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
