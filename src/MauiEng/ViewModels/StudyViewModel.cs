@@ -32,40 +32,40 @@ public partial class StudyViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial string Title { get; set; } = "Сегодня";
+    private string title = "Сегодня";
 
     [ObservableProperty]
-    public partial string Term { get; set; } = "";
+    private string term = "";
 
     [ObservableProperty]
-    public partial string Translation { get; set; } = "";
+    private string translation = "";
 
     [ObservableProperty]
-    public partial string Transcription { get; set; } = "";
+    private string transcription = "";
 
     [ObservableProperty]
-    public partial string Example { get; set; } = "";
+    private string example = "";
 
     [ObservableProperty]
-    public partial string BoxLabel { get; set; } = "";
+    private string boxLabel = "";
 
     [ObservableProperty]
-    public partial string RemainingText { get; set; } = "";
+    private string remainingText = "";
 
     [ObservableProperty]
-    public partial string ErrorMessage { get; set; } = "";
+    private string errorMessage = "";
 
     [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    private bool isBusy;
 
     [ObservableProperty]
-    public partial bool IsLoading { get; set; }
+    private bool isLoading;
 
     [ObservableProperty]
-    public partial WordCard? Current { get; set; }
+    private WordCard? current;
 
     [ObservableProperty]
-    public partial int CardGeneration { get; set; }
+    private int cardGeneration;
 
     public bool HasCard => Current is not null;
 
@@ -92,6 +92,8 @@ public partial class StudyViewModel : ObservableObject
             _queue.Clear();
             _queue.AddRange(cards);
             ShowCurrent();
+            if (_queue.Count == 0)
+                await _progress.MarkTaskDoneAsync(today, DayTaskKind.Cards);
         }
         catch (Exception ex)
         {

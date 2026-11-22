@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MauiEng.Views.AddPhrasePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MauiEng.ViewModels"
+    x:DataType="vm:AddPhraseViewModel"
+    Title="Новая фраза"
+    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,32,24,28" Spacing="12">
+            <Label Text="Фраза из сериала" FontAttributes="Bold" FontSize="28" />
+            <Entry Text="{Binding Text}" Placeholder="English phrase" FontSize="18" />
+            <Entry Text="{Binding Translation}" Placeholder="Перевод (необязательно)" FontSize="18" />
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" TextColor="{StaticResource Danger}" />
+            <Button Text="Сохранить" Command="{Binding SaveCommand}" HeightRequest="56" FontSize="18" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

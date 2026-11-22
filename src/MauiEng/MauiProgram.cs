@@ -20,22 +20,32 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<Database>();
-        builder.Services.AddSingleton<ConnectionStore>();
         builder.Services.AddSingleton<WordRepository>();
         builder.Services.AddSingleton<ProgressRepository>();
+        builder.Services.AddSingleton<PhraseRepository>();
         builder.Services.AddSingleton<SpeechService>();
-        builder.Services.AddSingleton<IAppNavigator, AppNavigator>();
+        builder.Services.AddSingleton<MediaLauncher>();
         builder.Services.AddSingleton<IStudyNavigation, StudyNavigation>();
+#if ANDROID
+        builder.Services.AddSingleton<IStatsWidgetUpdater, AndroidStatsWidgetUpdater>();
+#else
+        builder.Services.AddSingleton<IStatsWidgetUpdater, NullStatsWidgetUpdater>();
+#endif
+
 
         builder.Services.AddSingleton<AppShell>();
-        builder.Services.AddTransient<ConnectionViewModel>();
-        builder.Services.AddTransient<ConnectionPage>();
         builder.Services.AddTransient<TodayViewModel>();
         builder.Services.AddTransient<TodayPage>();
         builder.Services.AddTransient<DecksViewModel>();
         builder.Services.AddTransient<DecksPage>();
         builder.Services.AddTransient<StudyViewModel>();
         builder.Services.AddTransient<StudyPage>();
+        builder.Services.AddTransient<SpeakViewModel>();
+        builder.Services.AddTransient<SpeakPage>();
+        builder.Services.AddTransient<AddWordViewModel>();
+        builder.Services.AddTransient<AddWordPage>();
+        builder.Services.AddTransient<AddPhraseViewModel>();
+        builder.Services.AddTransient<AddPhrasePage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

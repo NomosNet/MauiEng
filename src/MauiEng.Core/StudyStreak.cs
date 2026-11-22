@@ -4,6 +4,8 @@ public static class StudyStreak
 {
     public const int DailyGoal = 20;
 
+    public const int TasksPerDay = 4;
+
     public static int Current(IEnumerable<DateOnly> goalMetDays, DateOnly today)
     {
         var met = goalMetDays as IReadOnlySet<DateOnly> ?? goalMetDays.ToHashSet();

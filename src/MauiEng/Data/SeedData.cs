@@ -1,6 +1,5 @@
 using MauiEng.Core;
-using Npgsql;
-using NpgsqlTypes;
+using Microsoft.Data.Sqlite;
 
 namespace MauiEng.Data;
 
@@ -36,55 +35,53 @@ internal static class SeedData
         new("read", "читать", "/riːd/", "I read a short story.")
     ];
 
-    public static async Task EnsureAsync(NpgsqlConnection connection, CancellationToken cancellationToken)
+    public static async Task EnsureAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
-        await using var check = new NpgsqlCommand("SELECT COUNT(*)::int FROM deck", connection);
+        await using var check = connection.CreateCommand();
+        check.CommandText = "SELECT COUNT(*) FROM deck";
         if (DbValues.Count(await check.ExecuteScalarAsync(cancellationToken)) > 0)
             return;
 
-        await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        await using var transaction = (SqliteTransaction)await connection.BeginTransactionAsync(cancellationToken);
+        var today = DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
 
         int deckId;
-        await using (var command = new NpgsqlCommand(
-            "INSERT INTO deck (name) VALUES (@name) RETURNING id",
-            connection,
-            transaction))
+        await using (var command = connection.CreateCommand())
         {
-            command.Parameters.AddWithValue("name", "Базовые слова");
+            command.Transaction = transaction;
+            command.CommandText = "INSERT INTO deck (name) VALUES ($name); SELECT last_insert_rowid();";
+            command.Parameters.AddWithValue("$name", "Базовые слова");
             deckId = DbValues.Id(await command.ExecuteScalarAsync(cancellationToken));
         }
 
         foreach (var word in Words)
         {
             int wordId;
-            await using (var command = new NpgsqlCommand(
-                """
-                INSERT INTO word (deck_id, term, translation, transcription, example)
-                VALUES (@deckId, @term, @translation, @transcription, @example)
-                RETURNING id
-                """,
-                connection,
-                transaction))
+            await using (var command = connection.CreateCommand())
             {
-                command.Parameters.AddWithValue("deckId", deckId);
-                command.Parameters.AddWithValue("term", word.Term);
-                command.Parameters.AddWithValue("translation", word.Translation);
-                command.Parameters.AddWithValue("transcription", word.Transcription);
-                command.Parameters.AddWithValue("example", word.Example);
+                command.Transaction = transaction;
+                command.CommandText = """
+                    INSERT INTO word (deck_id, term, translation, transcription, example)
+                    VALUES ($deckId, $term, $translation, $transcription, $example);
+                    SELECT last_insert_rowid();
+                    """;
+                command.Parameters.AddWithValue("$deckId", deckId);
+                command.Parameters.AddWithValue("$term", word.Term);
+                command.Parameters.AddWithValue("$translation", word.Translation);
+                command.Parameters.AddWithValue("$transcription", word.Transcription);
+                command.Parameters.AddWithValue("$example", word.Example);
                 wordId = DbValues.Id(await command.ExecuteScalarAsync(cancellationToken));
             }
 
-            await using var review = new NpgsqlCommand(
-                """
+            await using var review = connection.CreateCommand();
+            review.Transaction = transaction;
+            review.CommandText = """
                 INSERT INTO review (word_id, ease, interval_days, successful_reps, due_on)
-                VALUES (@wordId, @ease, 0, 0, @due)
-                """,
-                connection,
-                transaction);
-            review.Parameters.AddWithValue("wordId", wordId);
-            review.Parameters.AddWithValue("ease", Sm2.InitialEase);
-            review.Parameters.Add(new NpgsqlParameter("due", NpgsqlDbType.Date) { Value = today });
+                VALUES ($wordId, $ease, 0, 0, $due)
+                """;
+            review.Parameters.AddWithValue("$wordId", wordId);
+            review.Parameters.AddWithValue("$ease", Sm2.InitialEase);
+            review.Parameters.AddWithValue("$due", today);
             await review.ExecuteNonQueryAsync(cancellationToken);
         }
 

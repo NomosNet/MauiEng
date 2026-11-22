@@ -8,48 +8,38 @@
     Title="Сегодня"
     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
 
-    <Grid Padding="24,32,24,28" RowDefinitions="*,Auto">
-        <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,32,24,28" Spacing="14">
             <Label
-                Text="Серия"
-                FontSize="16"
-                HorizontalTextAlignment="Center"
-                TextColor="{StaticResource Gray500}" />
+                Text="🔥"
+                FontSize="42"
+                HorizontalTextAlignment="Center" />
             <Label
                 Text="{Binding Streak}"
                 FontAttributes="Bold"
-                FontSize="88"
+                FontSize="72"
                 HorizontalTextAlignment="Center" />
             <Label
                 Text="{Binding StreakCaption}"
                 FontSize="18"
                 HorizontalTextAlignment="Center" />
 
-            <BoxView
-                HeightRequest="1"
-                Margin="0,28,0,20"
-                Color="{StaticResource Gray200}" />
-
             <Label
-                Text="Цель на сегодня"
+                Margin="0,12,0,0"
+                Text="План на сегодня"
                 FontSize="16"
                 HorizontalTextAlignment="Center"
                 TextColor="{StaticResource Gray500}" />
             <Label
                 Text="{Binding GoalText}"
                 FontAttributes="Bold"
-                FontSize="32"
+                FontSize="28"
                 HorizontalTextAlignment="Center" />
             <ProgressBar
                 HeightRequest="8"
-                Margin="0,8,0,0"
                 Progress="{Binding GoalProgress}"
                 ProgressColor="{StaticResource Primary}" />
-            <Label
-                Text="{Binding DueText}"
-                Margin="0,16,0,0"
-                FontSize="16"
-                HorizontalTextAlignment="Center" />
+
             <Label
                 Text="{Binding ErrorMessage}"
                 IsVisible="{Binding HasError}"
@@ -58,13 +48,46 @@
             <ActivityIndicator
                 IsRunning="{Binding IsBusy}"
                 IsVisible="{Binding IsBusy}" />
-        </VerticalStackLayout>
 
-        <Button
-            Grid.Row="1"
-            Text="Заниматься"
-            Command="{Binding StartCommand}"
-            HeightRequest="64"
-            FontSize="20" />
-    </Grid>
+            <Border Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="14" StrokeShape="RoundRectangle 12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding CardsText}" FontSize="17" FontAttributes="Bold" />
+                    <Button Text="Заниматься" Command="{Binding StartCardsCommand}" HeightRequest="52" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="14" StrokeShape="RoundRectangle 12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding ReadingText}" FontSize="17" FontAttributes="Bold" />
+                    <Label Text="{Binding BookName}" FontSize="14" TextColor="{StaticResource Gray500}" />
+                    <Button Text="Выбрать книгу" Command="{Binding PickBookCommand}" HeightRequest="48" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Открыть" Command="{Binding OpenReadingCommand}" HeightRequest="48" />
+                        <Button Grid.Column="1" Text="Готово" Command="{Binding CompleteReadingCommand}" HeightRequest="48" />
+                    </Grid>
+                    <Button Text="Добавить слово" Command="{Binding AddWordCommand}" HeightRequest="44" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="14" StrokeShape="RoundRectangle 12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding WatchingText}" FontSize="17" FontAttributes="Bold" />
+                    <Label Text="{Binding VideoName}" FontSize="14" TextColor="{StaticResource Gray500}" />
+                    <Button Text="Выбрать видео" Command="{Binding PickVideoCommand}" HeightRequest="48" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Открыть" Command="{Binding OpenWatchingCommand}" HeightRequest="48" />
+                        <Button Grid.Column="1" Text="Готово" Command="{Binding CompleteWatchingCommand}" HeightRequest="48" />
+                    </Grid>
+                    <Button Text="Добавить фразу" Command="{Binding AddPhraseCommand}" HeightRequest="44" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="14" StrokeShape="RoundRectangle 12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding SpeakingText}" FontSize="17" FontAttributes="Bold" />
+                    <Button Text="Проговаривать" Command="{Binding StartSpeakingCommand}" HeightRequest="52" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -21,13 +21,13 @@ public partial class DecksViewModel : ObservableObject
     public ObservableCollection<DeckSummary> Decks { get; } = [];
 
     [ObservableProperty]
-    public partial string ErrorMessage { get; set; } = "";
+    private string errorMessage = "";
 
     [ObservableProperty]
-    public partial bool IsBusy { get; set; }
+    private bool isBusy;
 
     [ObservableProperty]
-    public partial bool IsEmpty { get; set; }
+    private bool isEmpty;
 
     public bool HasError => ErrorMessage.Length > 0;
 

@@ -12,4 +12,10 @@ public sealed class StudyNavigation : IStudyNavigation
 
         return Shell.Current.GoToAsync(route);
     }
+
+    public Task OpenSpeakAsync() => Shell.Current.GoToAsync(nameof(SpeakPage));
+
+    public Task OpenAddWordAsync() => Shell.Current.GoToAsync(nameof(AddWordPage));
+
+    public Task OpenAddPhraseAsync() => Shell.Current.GoToAsync(nameof(AddPhrasePage));
 }

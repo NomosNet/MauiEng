@@ -1,4 +1,3 @@
-using MauiEng.Views;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MauiEng;
@@ -15,7 +14,7 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        var window = new Window(_services.GetRequiredService<ConnectionPage>())
+        var window = new Window(_services.GetRequiredService<AppShell>())
         {
             Title = "MauiEng"
         };
